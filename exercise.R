@@ -12,12 +12,12 @@ adae <- pharmaverseadam::adae
 # Note we're keeping these separate so that they don't share
 # chat histories with each other and can preserve only the specific contexts
 # that we want them to have.
-prod_agent_chat <- chat_aws_bedrock(
-  model = "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
+prod_agent_chat <- chat_anthropic(
+  model = "claude-sonnet-4-5-20250929",
 )
 
-qc_agent_chat <- chat_aws_bedrock(
-  model = "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
+qc_agent_chat <- chat_anthropic(
+  model = "claude-sonnet-4-5-20250929",
 )
 
 # Use a helper function to create the production prompt. You can find each of the 
@@ -80,11 +80,14 @@ qc_result <- tryCatch(
   },
   # This 
   error = function(e) {
+
+    err <- sprintf("%s\n%s", e$message, paste(as.character(traceback()), collapse="\n"))
+
     return(
       list(
         success = FALSE, 
         output = ":(",
-        error = e$message
+        error = err
       )
     )
   }
@@ -96,7 +99,9 @@ qc_result$output
 # Follow up and ask the LLM to fix the error
 if (!qc_result$success) {
   qc_agent_chat$chat(
-    sprintf("The code encountered an error:\n %s", qc_result$error), echo=FALSE
+    sprintf("The code encountered an error:\n %s\n %s", 
+    qc_result$error, 
+    paste(as.character(traceback()), collapse="\n")), echo=FALSE
   )
 
   qc_code <- extract_code_from_response(qc_response) 
