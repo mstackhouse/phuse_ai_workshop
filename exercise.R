@@ -1,4 +1,6 @@
 library(ellmer)
+library(tidyverse)
+library(gt)
 
 # Pull in helper functions and prompts
 source("./utils.R")
