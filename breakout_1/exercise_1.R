@@ -4,7 +4,7 @@ library(gt)
 
 # Pull in helper functions and prompts
 source("./utils.R")
-source("./breakout_2/prompts_2.R")
+source("./breakout_1/prompts_1.R")
 
 # Load CDISC data from the pharmaverseadam package
 adsl <- pharmaverseadam::adsl
