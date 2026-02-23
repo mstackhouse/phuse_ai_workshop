@@ -26,7 +26,7 @@ qc_agent_chat <- chat_anthropic(
   model = "claude-sonnet-4-5-20250929",
 )
 
-# qc_agent_chat <= chat_openai(
+# qc_agent_chat <- chat_openai(
 #   model="gpt-5"
 # )
 
@@ -53,6 +53,9 @@ cat(prod_response)
 
 prod_code <- extract_code_from_response(prod_response) # This function pulls out the code so we can use it in the QC agent
 prod_text <- extract_text_from_response(prod_response) # If you want to see what the LLM had to say, you can print this variable
+
+# Test the prod code to see if it executes
+  eval(parse(text = qc_code))
 
 # Now build the prompt to submit to the QC agent. 
 # We'll provide a lot of the same information, but now we have code that can be reviewed.
